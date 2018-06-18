@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
@@ -60,23 +59,33 @@ class RangeSeekBar : View {
         val defaultSidePadding = res.getDimensionPixelSize(R.dimen.rsb_defaultSidePadding)
         val defaultTouchRadius = res.getDimensionPixelSize(R.dimen.rsb_touchRadius)
         val defaultTrackColor = ContextCompat.getColor(context, R.color.rsb_trackDefaultColor)
-        val defaultSelectedTrackColor = ContextCompat.getColor(context, R.color.rsb_trackSelectedDefaultColor)
+        val defaultSelectedTrackColor = ContextCompat.getColor(context,
+                R.color.rsb_trackSelectedDefaultColor)
 
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.RangeSeekBar, 0, 0)
         try {
             max = a.getInteger(R.styleable.RangeSeekBar_rsb_max, 100)
             minWindow = max(a.getInteger(R.styleable.RangeSeekBar_rsb_minWindow, 1), 1)
-            sidePadding = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_sidePadding, defaultSidePadding)
-            touchRadius = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_touchRadius, defaultTouchRadius)
+            sidePadding = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_sidePadding,
+                    defaultSidePadding)
+            touchRadius = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_touchRadius,
+                    defaultTouchRadius)
             trackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 style = Paint.Style.STROKE
-                strokeWidth = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_trackWidth, defaultTrackWidth).toFloat()
+                strokeWidth = a.getDimensionPixelSize(
+                        R.styleable.RangeSeekBar_rsb_trackWidth,
+                        defaultTrackWidth
+                ).toFloat()
                 color = a.getColor(R.styleable.RangeSeekBar_rsb_trackColor, defaultTrackColor)
             }
             selectedTrackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 style = Paint.Style.STROKE
-                strokeWidth = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_trackSelectedWidth, defaultTrackWidth).toFloat()
-                color = a.getColor(R.styleable.RangeSeekBar_rsb_trackSelectedColor, defaultSelectedTrackColor)
+                strokeWidth = a.getDimensionPixelSize(
+                        R.styleable.RangeSeekBar_rsb_trackSelectedWidth,
+                        defaultTrackWidth
+                ).toFloat()
+                color = a.getColor(R.styleable.RangeSeekBar_rsb_trackSelectedColor,
+                        defaultSelectedTrackColor)
             }
             minThumbDrawable = if(a.hasValue(R.styleable.RangeSeekBar_rsb_minThumbDrawable)) {
                 a.getDrawable(R.styleable.RangeSeekBar_rsb_minThumbDrawable)
@@ -113,10 +122,13 @@ class RangeSeekBar : View {
         val verticalCenter = height / 2f
         val x1 = paddingLeft + (minThumb / max.toFloat()) * width
         val x2 = paddingLeft + (maxThumb / max.toFloat()) * width
-        canvas.drawLine(paddingLeft + 0f, verticalCenter, paddingLeft + width.toFloat(), verticalCenter, trackPaint)
+        canvas.drawLine(paddingLeft + 0f, verticalCenter, paddingLeft + width.toFloat(),
+                verticalCenter, trackPaint)
         canvas.drawLine(x1, verticalCenter, x2, verticalCenter, selectedTrackPaint)
-        canvas.drawBitmap(minThumbBitmap, x1, (height - minThumbBitmap.height) / 2f, bitmapPaint)
-        canvas.drawBitmap(maxThumbBitmap, x2 - maxThumbBitmap.width.toFloat(), (height - maxThumbBitmap.height) / 2f, bitmapPaint)
+        canvas.drawBitmap(minThumbBitmap, x1, (height - minThumbBitmap.height) / 2f,
+                bitmapPaint)
+        canvas.drawBitmap(maxThumbBitmap, x2 - maxThumbBitmap.width.toFloat(),
+                (height - maxThumbBitmap.height) / 2f, bitmapPaint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -126,7 +138,8 @@ class RangeSeekBar : View {
         val width = width - paddingLeft - paddingRight
         val mx = when {
             event.x < paddingLeft -> 0
-            event.x in paddingLeft..this.width - paddingRight -> ((event.x - paddingLeft) / width * max).toInt()
+            event.x in paddingLeft..this.width - paddingRight ->
+                ((event.x - paddingLeft) / width * max).toInt()
             else -> max
         }
         val leftThumbX = (paddingLeft + (minThumb / max.toFloat() * width)).toInt()
