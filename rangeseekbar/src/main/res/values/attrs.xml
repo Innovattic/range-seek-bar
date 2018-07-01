@@ -3,10 +3,10 @@
     <declare-styleable name="RangeSeekBar">
         <attr name="rsb_trackColor" format="color"/>
         <attr name="rsb_trackSelectedColor" format="color"/>
-        <attr name="rsb_trackWidth" format="dimension"/>
+        <attr name="rsb_trackThickness" format="dimension"/>
         <attr name="rsb_sidePadding" format="dimension"/>
         <attr name="rsb_touchRadius" format="dimension"/>
-        <attr name="rsb_trackSelectedWidth" format="dimension"/>
+        <attr name="rsb_trackSelectedThickness" format="dimension"/>
         <attr name="rsb_minThumbDrawable" format="reference"/>
         <attr name="rsb_maxThumbDrawable" format="reference"/>
         <attr name="rsb_minWindow" format="integer"/>
