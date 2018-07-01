@@ -40,12 +40,12 @@ class RangeSeekBar : View {
     var max = 100
         set(value) {
             field = value
-            minThumb = 0
-            maxThumb = field
+            minThumbValue = 0
+            maxThumbValue = field
         }
-    var minThumb: Int = 0
+    var minThumbValue: Int = 0
         private set
-    var maxThumb: Int = max
+    var maxThumbValue: Int = max
         private set
     var seekBarChangeListener: SeekBarChangeListener? = null
 
@@ -120,8 +120,8 @@ class RangeSeekBar : View {
         val paddingRight = this.paddingRight + sidePadding
         val width = width - paddingLeft - paddingRight
         val verticalCenter = height / 2f
-        val x1 = paddingLeft + (minThumb / max.toFloat()) * width
-        val x2 = paddingLeft + (maxThumb / max.toFloat()) * width
+        val x1 = paddingLeft + (minThumbValue / max.toFloat()) * width
+        val x2 = paddingLeft + (maxThumbValue / max.toFloat()) * width
         canvas.drawLine(paddingLeft + 0f, verticalCenter, paddingLeft + width.toFloat(),
                 verticalCenter, trackPaint)
         canvas.drawLine(x1, verticalCenter, x2, verticalCenter, selectedTrackPaint)
@@ -142,28 +142,28 @@ class RangeSeekBar : View {
                 ((event.x - paddingLeft) / width * max).toInt()
             else -> max
         }
-        val leftThumbX = (paddingLeft + (minThumb / max.toFloat() * width)).toInt()
-        val rightThumbX = (paddingLeft + (maxThumb / max.toFloat() * width)).toInt()
+        val leftThumbX = (paddingLeft + (minThumbValue / max.toFloat() * width)).toInt()
+        val rightThumbX = (paddingLeft + (maxThumbValue / max.toFloat() * width)).toInt()
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 if(isInsideRadius(event, leftThumbX, height / 2)) {
                     selectedThumb = THUMB_MIN
-                    offset = mx - minThumb
+                    offset = mx - minThumbValue
                     changed = true
                     seekBarChangeListener?.onStartedSeeking()
                 } else if(isInsideRadius(event, rightThumbX, height / 2)) {
                     selectedThumb = THUMB_MAX
-                    offset = maxThumb - mx
+                    offset = maxThumbValue - mx
                     changed = true
                     seekBarChangeListener?.onStartedSeeking()
                 }
             }
             MotionEvent.ACTION_MOVE -> {
                 if (selectedThumb == THUMB_MIN) {
-                    minThumb = max(min(mx - offset, max - minWindow), 0)
+                    minThumbValue = max(min(mx - offset, max - minWindow), 0)
                     changed = true
                 } else if (selectedThumb == THUMB_MAX) {
-                    maxThumb = min(max(mx + offset, minWindow), max)
+                    maxThumbValue = min(max(mx + offset, minWindow), max)
                     changed = true
                 }
             }
@@ -173,17 +173,17 @@ class RangeSeekBar : View {
             }
         }
         if (selectedThumb == THUMB_MAX) {
-            if (maxThumb <= minThumb + minWindow) {
-                minThumb = maxThumb - minWindow
+            if (maxThumbValue <= minThumbValue + minWindow) {
+                minThumbValue = maxThumbValue - minWindow
             }
         } else if (selectedThumb == THUMB_MIN) {
-            if (minThumb > maxThumb - minWindow) {
-                maxThumb = minThumb + minWindow
+            if (minThumbValue > maxThumbValue - minWindow) {
+                maxThumbValue = minThumbValue + minWindow
             }
         }
         if (changed) {
             invalidate()
-            seekBarChangeListener?.onValueChanged(minThumb, maxThumb)
+            seekBarChangeListener?.onValueChanged(minThumbValue, maxThumbValue)
             return true
         }
         return false
