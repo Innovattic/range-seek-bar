@@ -1,5 +1,6 @@
 package com.innovattic.rangeseekbar
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -103,15 +104,19 @@ class RangeSeekBar : View {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        if (width <= 0 || height <= 0) {
-            return
+        setMeasuredDimension(getDefaultSize(suggestedMinimumWidth, widthMeasureSpec),
+                measureHeight(heightMeasureSpec))
+    }
+
+    @SuppressLint("SwitchIntDef")
+    private fun measureHeight(measureSpec: Int) : Int {
+        val maxOfBitmapHeights = max(minThumbBitmap.height, maxThumbBitmap.height) + sidePadding
+        val specMode = MeasureSpec.getMode(measureSpec)
+        val specSize = MeasureSpec.getSize(measureSpec)
+        return when(specMode) {
+            MeasureSpec.EXACTLY-> max(specSize, maxOfBitmapHeights)
+            else -> maxOfBitmapHeights
         }
-        val newHeight = max(minThumbBitmap.height, maxThumbBitmap.height)
-        if (newHeight > height) {
-            layoutParams.height = newHeight
-        }
-        invalidate()
     }
 
     override fun onDraw(canvas: Canvas) {
