@@ -2,6 +2,7 @@ package com.innovattic.rangeseekbar
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
@@ -20,10 +21,11 @@ class RangeSeekBar : View {
     private var selectedThumb: Int = THUMB_NONE
     private var offset: Int = 0
 
-    var trackThickness: Int = 0
-    var trackSelectedThickness: Int = 0
-    var trackColor: Int = 0
-    var trackSelectedColor: Int = 0
+    var trackThickness: Int
+    var trackSelectedThickness: Int
+    var trackColor: Int
+    var trackSelectedColor: Int
+
     var touchRadius: Int
 
     var minThumbDrawable: Drawable
@@ -32,7 +34,7 @@ class RangeSeekBar : View {
     var sidePadding: Int
     var minWindow: Int
 
-    var max = 100
+    var max: Int
         set(value) {
             field = value
             minThumbValue = 0
@@ -40,7 +42,7 @@ class RangeSeekBar : View {
         }
     var minThumbValue: Int = 0
         private set
-    var maxThumbValue: Int = max
+    var maxThumbValue: Int = 0
         private set
     var seekBarChangeListener: SeekBarChangeListener? = null
 
@@ -56,36 +58,21 @@ class RangeSeekBar : View {
         val defaultTrackColor = ContextCompat.getColor(context, R.color.rsb_trackDefaultColor)
         val defaultSelectedTrackColor = ContextCompat.getColor(context,
                 R.color.rsb_trackSelectedDefaultColor)
+        val defaultMinThumb = ContextCompat.getDrawable(context, R.drawable.rsb_bracket_min)!!
+        val defaultMaxThumb = ContextCompat.getDrawable(context, R.drawable.rsb_bracket_max)!!
 
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.RangeSeekBar, 0, 0)
         try {
-            max = a.getInteger(R.styleable.RangeSeekBar_rsb_max, 100)
-            minWindow = max(a.getInteger(R.styleable.RangeSeekBar_rsb_minWindow, 1), 1)
-            sidePadding = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_sidePadding,
-                    defaultSidePadding)
-            touchRadius = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_touchRadius,
-                    defaultTouchRadius)
-            trackThickness = a.getDimensionPixelSize(
-                    R.styleable.RangeSeekBar_rsb_trackThickness,
-                    defaultTrackThickness
-            )
-            trackSelectedThickness = a.getDimensionPixelSize(
-                    R.styleable.RangeSeekBar_rsb_trackSelectedThickness,
-                    defaultTrackThickness
-            )
-            trackColor = a.getColor(R.styleable.RangeSeekBar_rsb_trackColor, defaultTrackColor)
-            trackSelectedColor = a.getColor(R.styleable.RangeSeekBar_rsb_trackSelectedColor,
-                    defaultSelectedTrackColor)
-            minThumbDrawable = if (a.hasValue(R.styleable.RangeSeekBar_rsb_minThumbDrawable)) {
-                a.getDrawable(R.styleable.RangeSeekBar_rsb_minThumbDrawable)
-            } else {
-                ContextCompat.getDrawable(context, R.drawable.rsb_bracket_min)!!
-            }
-            maxThumbDrawable = if (a.hasValue(R.styleable.RangeSeekBar_rsb_maxThumbDrawable)) {
-                a.getDrawable(R.styleable.RangeSeekBar_rsb_maxThumbDrawable)
-            } else {
-                ContextCompat.getDrawable(context, R.drawable.rsb_bracket_max)!!
-            }
+            max = extractMaxValue(a)
+            minWindow = extractMinWindow(a)
+            sidePadding = extractSidePadding(a, defaultSidePadding)
+            touchRadius = extractTouchRadius(a, defaultTouchRadius)
+            trackThickness = extractTrackThickness(a, defaultTrackThickness)
+            trackSelectedThickness = extractTrackSelectedThickness(a, defaultTrackThickness)
+            trackColor = extractTrackColor(a, defaultTrackColor)
+            trackSelectedColor = extractTrackSelectedColor(a, defaultSelectedTrackColor)
+            minThumbDrawable = extractMinThumbDrawable(a, defaultMinThumb)
+            maxThumbDrawable = extractMaxThumbDrawable(a, defaultMaxThumb)
         } finally {
             a.recycle()
         }
@@ -129,7 +116,7 @@ class RangeSeekBar : View {
         minThumbDrawable.drawAtPosition(canvas, minimumX.toInt())
 
         // Draw thumb at maximumX position
-        maxThumbDrawable.drawAtPosition(canvas,maximumX.toInt() - maxThumbDrawable.intrinsicWidth)
+        maxThumbDrawable.drawAtPosition(canvas, maximumX.toInt() - maxThumbDrawable.intrinsicWidth)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -205,6 +192,52 @@ class RangeSeekBar : View {
     private fun updatePaint(strokeWidth: Int, color: Int) {
         trackPaint.strokeWidth = strokeWidth.toFloat()
         trackPaint.color = color
+    }
+
+    private fun extractMaxThumbDrawable(a: TypedArray, defaultValue: Drawable): Drawable {
+        if (a.hasValue(R.styleable.RangeSeekBar_rsb_maxThumbDrawable)) {
+            return a.getDrawable(R.styleable.RangeSeekBar_rsb_maxThumbDrawable)
+        }
+        return defaultValue
+    }
+
+    private fun extractMinThumbDrawable(a: TypedArray, defaultValue: Drawable): Drawable {
+        if (a.hasValue(R.styleable.RangeSeekBar_rsb_minThumbDrawable)) {
+            return a.getDrawable(R.styleable.RangeSeekBar_rsb_minThumbDrawable)
+        }
+        return defaultValue
+    }
+
+    private fun extractTrackSelectedColor(a: TypedArray, defaultValue: Int): Int {
+        return a.getColor(R.styleable.RangeSeekBar_rsb_trackSelectedColor, defaultValue)
+    }
+
+    private fun extractTrackColor(a: TypedArray, defaultValue: Int): Int {
+        return a.getColor(R.styleable.RangeSeekBar_rsb_trackColor, defaultValue)
+    }
+
+    private fun extractTrackSelectedThickness(a: TypedArray, defaultValue: Int): Int {
+        return a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_trackSelectedThickness, defaultValue)
+    }
+
+    private fun extractTrackThickness(a: TypedArray, defaultValue: Int): Int {
+        return a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_trackThickness, defaultValue)
+    }
+
+    private fun extractTouchRadius(a: TypedArray, defaultValue: Int): Int {
+        return a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_touchRadius, defaultValue)
+    }
+
+    private fun extractSidePadding(a: TypedArray, defaultValue: Int): Int {
+        return a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_sidePadding, defaultValue)
+    }
+
+    private fun extractMinWindow(a: TypedArray): Int {
+        return max(a.getInteger(R.styleable.RangeSeekBar_rsb_minWindow, 1), 1)
+    }
+
+    private fun extractMaxValue(a: TypedArray): Int {
+        return a.getInteger(R.styleable.RangeSeekBar_rsb_max, 100)
     }
 
     companion object {
