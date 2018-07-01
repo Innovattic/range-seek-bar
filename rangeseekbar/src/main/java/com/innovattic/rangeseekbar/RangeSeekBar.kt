@@ -2,9 +2,9 @@ package com.innovattic.rangeseekbar
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
@@ -16,24 +16,16 @@ import kotlin.math.min
 class RangeSeekBar : View {
     private val trackPaint: Paint
     private val selectedTrackPaint: Paint
-    private val bitmapPaint = Paint()
 
     private var selectedThumb: Int = THUMB_NONE
     private var offset: Int = 0
 
     var touchRadius: Int
+
+    private val drawingRect = Rect()
+
     var minThumbDrawable: Drawable
-    set(value) {
-        field = value
-        minThumbBitmap = getBitmapFromDrawable(minThumbDrawable)
-    }
     var maxThumbDrawable: Drawable
-    set(value) {
-        field = value
-        maxThumbBitmap = getBitmapFromDrawable(maxThumbDrawable)
-    }
-    private lateinit var minThumbBitmap: Bitmap
-    private lateinit var maxThumbBitmap: Bitmap
 
     var sidePadding: Int
     var minWindow: Int
@@ -88,12 +80,12 @@ class RangeSeekBar : View {
                 color = a.getColor(R.styleable.RangeSeekBar_rsb_trackSelectedColor,
                         defaultSelectedTrackColor)
             }
-            minThumbDrawable = if(a.hasValue(R.styleable.RangeSeekBar_rsb_minThumbDrawable)) {
+            minThumbDrawable = if (a.hasValue(R.styleable.RangeSeekBar_rsb_minThumbDrawable)) {
                 a.getDrawable(R.styleable.RangeSeekBar_rsb_minThumbDrawable)
             } else {
                 ContextCompat.getDrawable(context, R.drawable.rsb_bracket_min)!!
             }
-            maxThumbDrawable = if(a.hasValue(R.styleable.RangeSeekBar_rsb_maxThumbDrawable)) {
+            maxThumbDrawable = if (a.hasValue(R.styleable.RangeSeekBar_rsb_maxThumbDrawable)) {
                 a.getDrawable(R.styleable.RangeSeekBar_rsb_maxThumbDrawable)
             } else {
                 ContextCompat.getDrawable(context, R.drawable.rsb_bracket_max)!!
@@ -109,13 +101,13 @@ class RangeSeekBar : View {
     }
 
     @SuppressLint("SwitchIntDef")
-    private fun measureHeight(measureSpec: Int) : Int {
-        val maxOfBitmapHeights = max(minThumbBitmap.height, maxThumbBitmap.height) + sidePadding
+    private fun measureHeight(measureSpec: Int): Int {
+        val maxHeight = max(minThumbDrawable.intrinsicHeight, maxThumbDrawable.intrinsicHeight)
         val specMode = MeasureSpec.getMode(measureSpec)
         val specSize = MeasureSpec.getSize(measureSpec)
-        return when(specMode) {
-            MeasureSpec.EXACTLY-> max(specSize, maxOfBitmapHeights)
-            else -> maxOfBitmapHeights
+        return when (specMode) {
+            MeasureSpec.EXACTLY -> specSize
+            else -> maxHeight + sidePadding
         }
     }
 
@@ -130,10 +122,12 @@ class RangeSeekBar : View {
         canvas.drawLine(paddingLeft + 0f, verticalCenter, paddingLeft + width.toFloat(),
                 verticalCenter, trackPaint)
         canvas.drawLine(x1, verticalCenter, x2, verticalCenter, selectedTrackPaint)
-        canvas.drawBitmap(minThumbBitmap, x1, (height - minThumbBitmap.height) / 2f,
-                bitmapPaint)
-        canvas.drawBitmap(maxThumbBitmap, x2 - maxThumbBitmap.width.toFloat(),
-                (height - maxThumbBitmap.height) / 2f, bitmapPaint)
+
+        minThumbDrawable.setDrawingBounds(x1.toInt())
+        minThumbDrawable.draw(canvas)
+
+        maxThumbDrawable.setDrawingBounds(x2.toInt() - maxThumbDrawable.intrinsicWidth)
+        maxThumbDrawable.draw(canvas)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -151,12 +145,12 @@ class RangeSeekBar : View {
         val rightThumbX = (paddingLeft + (maxThumbValue / max.toFloat() * width)).toInt()
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                if(isInsideRadius(event, leftThumbX, height / 2)) {
+                if (isInsideRadius(event, leftThumbX, height / 2)) {
                     selectedThumb = THUMB_MIN
                     offset = mx - minThumbValue
                     changed = true
                     seekBarChangeListener?.onStartedSeeking()
-                } else if(isInsideRadius(event, rightThumbX, height / 2)) {
+                } else if (isInsideRadius(event, rightThumbX, height / 2)) {
                     selectedThumb = THUMB_MAX
                     offset = maxThumbValue - mx
                     changed = true
@@ -198,6 +192,15 @@ class RangeSeekBar : View {
         val dx = event.x - cx
         val dy = event.y - cy
         return (dx * dx) + (dy * dy) < (touchRadius * touchRadius)
+    }
+
+    private fun Drawable.setDrawingBounds(position: Int) {
+        bounds = drawingRect.apply {
+            top = (height - intrinsicHeight) / 2
+            bottom = top + intrinsicHeight
+            left = position
+            right = left + intrinsicWidth
+        }
     }
 
     companion object {
