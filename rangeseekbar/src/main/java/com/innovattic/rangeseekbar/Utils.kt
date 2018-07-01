@@ -24,7 +24,8 @@ fun getBitmapFromVectorDrawable(vectorDrawable: VectorDrawable): Bitmap {
 fun getBitmapFromVectorDrawable(vectorDrawable: VectorDrawableCompat): Bitmap {
     val bitmap = Bitmap.createBitmap(
             vectorDrawable.intrinsicWidth,
-            vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+            vectorDrawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
     )
     val canvas = Canvas(bitmap)
     vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
@@ -36,9 +37,9 @@ fun getBitmapFromDrawable(drawable: Drawable): Bitmap {
     return if (drawable is BitmapDrawable) {
         drawable.bitmap
     } else if (drawable is VectorDrawableCompat) {
-        getBitmapFromVectorDrawable((drawable as VectorDrawableCompat?)!!)
+        getBitmapFromVectorDrawable(drawable)
     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && drawable is VectorDrawable) {
-        getBitmapFromVectorDrawable((drawable as VectorDrawable?)!!)
+        getBitmapFromVectorDrawable(drawable)
     } else {
         throw IllegalArgumentException("Unsupported drawable type")
     }
