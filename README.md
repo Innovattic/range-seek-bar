@@ -6,12 +6,22 @@ The missing view for android.
 - [Attributes](#attributes)
 
 ### Usage
+First add jitpack to your projects build.gradle file
 
-Add the dependency in your android app module's `build.gradle` file.
+```gradle
+allprojects {
+   	repositories {
+   		...
+   		maven { url "https://jitpack.io" }
+   	}
+}
+```
+
+Then add the dependency in your android app module's `build.gradle` file.
 
 ```gradle
 dependencies {
-    compile 'com.innovattic.range-seek-bar:1.0'
+    compile 'com.github.innovattic:range-seek-bar:1.0'
 }
 ```
 
@@ -28,7 +38,7 @@ Then use the view in your layouts:
 
 ### Attributes
 
-You can change view attributes directly from your layout's xml file:
+You can change view attributes directly from your layout's xml file or in your java/kotlin code:
 
 | Variable                   | XML Attribute              | Type      | Description                                                                            |
 | :------------------------- | :------------------------- | :-------- | :--------------------------------------------------------------------------------------|
