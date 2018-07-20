@@ -2,8 +2,13 @@
 
 The missing view for android.
 
+- [Screenshot](#screenshot)
 - [Usage](#usage)
 - [Attributes](#attributes)
+
+### Screenshot
+
+![Sample](/screenshots/sample.png)
 
 ### Usage
 First add jitpack to your projects build.gradle file
