@@ -8,7 +8,7 @@ The missing view for android.
 
 ### Screenshot
 
-![Sample](/screenshots/sample.png)
+<img src="/screenshots/sample.png" width="400px" />
 
 ### Usage
 First add jitpack to your projects build.gradle file
