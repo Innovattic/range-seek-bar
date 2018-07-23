@@ -26,7 +26,7 @@ Then add the dependency in your android app module's `build.gradle` file.
 
 ```gradle
 dependencies {
-    implementation 'com.github.innovattic:range-seek-bar:1.0'
+    implementation 'com.github.innovattic:range-seek-bar:v1.0'
 }
 ```
 
