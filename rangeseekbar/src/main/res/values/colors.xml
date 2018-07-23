@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="rsb_trackDefaultColor">#cccccc</color>
+    <color name="rsb_trackSelectedDefaultColor">#fefefe</color>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <com.innovattic.rangeseekbar.RangeSeekBar
+        android:id="@+id/rangeSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent" />
+
+    <com.innovattic.rangeseekbar.RangeSeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:rsb_maxThumbDrawable="@drawable/thumb_circle"
+        app:rsb_minThumbDrawable="@drawable/thumb_circle"
+        app:rsb_trackColor="#888"
+        app:rsb_trackSelectedColor="#222"
+        app:rsb_trackSelectedThickness="4dp"
+        app:rsb_trackThickness="2dp"/>
+</LinearLayout>
