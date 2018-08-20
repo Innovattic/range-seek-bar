@@ -3,7 +3,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.innovattic'
-version = '1.0'
+version = '1.0.1'
 
 android {
     compileSdkVersion 27
@@ -11,8 +11,6 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
     }
 
     buildTypes {
