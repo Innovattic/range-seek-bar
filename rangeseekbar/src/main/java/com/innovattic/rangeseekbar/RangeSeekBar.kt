@@ -20,7 +20,7 @@ import kotlin.math.min
  *
  * @author Mohammad Mirrajabi
  */
-class RangeSeekBar : View {
+open class RangeSeekBar : View {
     // region Properties
 
     /**
