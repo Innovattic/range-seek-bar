@@ -21,5 +21,5 @@
         app:rsb_trackColor="#888"
         app:rsb_trackSelectedColor="#222"
         app:rsb_trackSelectedThickness="4dp"
-        app:rsb_trackThickness="2dp"/>
+        app:rsb_trackThickness="2dp" />
 </LinearLayout>
