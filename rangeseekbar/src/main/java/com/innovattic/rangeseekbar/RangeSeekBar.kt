@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Point
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
@@ -81,6 +82,16 @@ open class RangeSeekBar : View {
 	var sidePadding: Int
 	
 	/**
+	 * Pixel offset of the min thumb
+	 */
+	var minThumbOffset: Point
+	
+	/**
+	 * Pixel offset of the max thumb
+	 */
+	var maxThumbOffset: Point
+	
+	/**
 	 * The minimum range to be selected. It should at least be 1.
 	 */
 	var minRange: Int
@@ -124,11 +135,7 @@ open class RangeSeekBar : View {
 	var seekBarChangeListener: SeekBarChangeListener? = null
 	// endregion
 	
-	@JvmOverloads constructor(
-		context: Context,
-		attrs: AttributeSet? = null,
-		defStyleAttr: Int = 0
-	) : super(context, attrs, defStyleAttr) {
+	@JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr) {
 		val res = context.resources
 		val defaultTrackThickness = res.getDimensionPixelSize(R.dimen.rsb_trackDefaultThickness)
 		val defaultSidePadding = res.getDimensionPixelSize(R.dimen.rsb_defaultSidePadding)
@@ -150,6 +157,8 @@ open class RangeSeekBar : View {
 			trackSelectedColor = extractTrackSelectedColor(a, defaultSelectedTrackColor)
 			minThumbDrawable = extractMinThumbDrawable(a, defaultMinThumb)
 			maxThumbDrawable = extractMaxThumbDrawable(a, defaultMaxThumb)
+			minThumbOffset = extractMinThumbOffset(a)
+			maxThumbOffset = extractMaxThumbOffset(a)
 		} finally {
 			a.recycle()
 		}
@@ -177,10 +186,10 @@ open class RangeSeekBar : View {
 		canvas.drawLine(minimumX, verticalCenter, maximumX, verticalCenter, trackPaint)
 		
 		// Draw thumb at minimumX position
-		minThumbDrawable.drawAtPosition(canvas, minimumX.toInt())
+		minThumbDrawable.drawAtPosition(canvas, minimumX.toInt(), minThumbOffset)
 		
 		// Draw thumb at maximumX position
-		maxThumbDrawable.drawAtPosition(canvas, maximumX.toInt() - maxThumbDrawable.intrinsicWidth)
+		maxThumbDrawable.drawAtPosition(canvas, maximumX.toInt() - maxThumbDrawable.intrinsicWidth, maxThumbOffset)
 	}
 	
 	override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -336,11 +345,13 @@ open class RangeSeekBar : View {
 	 * Calculates and sets the drawing bounds for drawable and draws it on canvas.
 	 *
 	 * @param canvas the canvas to draw on
-	 * @param position the horizontal position of the drawable's left
+	 * @param position position of the drawable's left edge in horizontal axis (in pixels)
+	 * @param offset the pixel offset of the drawable
 	 */
-	private fun Drawable.drawAtPosition(canvas: Canvas, position: Int) {
-		val top = (height - intrinsicHeight) / 2
-		setBounds(position, top, position + intrinsicWidth, top + intrinsicHeight)
+	private fun Drawable.drawAtPosition(canvas: Canvas, position: Int, offset: Point = Point(0, 0)) {
+		val left = position + offset.x
+		val top = ((height - intrinsicHeight) / 2) + offset.y
+		setBounds(left, top, left + intrinsicWidth, top + intrinsicHeight)
 		draw(canvas)
 	}
 	// endregion
@@ -392,6 +403,18 @@ open class RangeSeekBar : View {
 	
 	private fun extractMaxValue(a: TypedArray): Int {
 		return a.getInteger(R.styleable.RangeSeekBar_rsb_max, 100)
+	}
+	
+	private fun extractMinThumbOffset(a: TypedArray): Point {
+		val x = a.getInteger(R.styleable.RangeSeekBar_rsb_minThumbOffsetHorizontal, 0)
+		val y = a.getInteger(R.styleable.RangeSeekBar_rsb_minThumbOffsetVertical, 0)
+		return Point(x, y)
+	}
+	
+	private fun extractMaxThumbOffset(a: TypedArray): Point {
+		val x = a.getInteger(R.styleable.RangeSeekBar_rsb_maxThumbOffsetHorizontal, 0)
+		val y = a.getInteger(R.styleable.RangeSeekBar_rsb_maxThumbOffsetVertical, 0)
+		return Point(x, y)
 	}
 	// endregion
 	// endregion

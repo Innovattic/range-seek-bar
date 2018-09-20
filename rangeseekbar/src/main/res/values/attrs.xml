@@ -11,5 +11,9 @@
         <attr name="rsb_maxThumbDrawable" format="reference" />
         <attr name="rsb_minRange" format="integer" />
         <attr name="rsb_max" format="integer" />
+        <attr name="rsb_minThumbOffsetVertical" format="integer" />
+        <attr name="rsb_maxThumbOffsetVertical" format="integer" />
+        <attr name="rsb_minThumbOffsetHorizontal" format="integer" />
+        <attr name="rsb_maxThumbOffsetHorizontal" format="integer" />
     </declare-styleable>
 </resources>

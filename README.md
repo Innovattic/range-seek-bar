@@ -26,7 +26,7 @@ Then add the dependency in your android app module's `build.gradle` file.
 
 ```gradle
 dependencies {
-    implementation 'com.github.Innovattic:range-seek-bar:v1.0.1'
+    implementation 'com.github.Innovattic:range-seek-bar:v1.0.2'
 }
 ```
 
@@ -45,15 +45,24 @@ Then use the view in your layouts:
 
 You can change view attributes directly from your layout's xml file or in your java/kotlin code:
 
-| Variable                   | XML Attribute              | Type      | Description                                                                            |
-| :------------------------- | :------------------------- | :-------- | :--------------------------------------------------------------------------------------|
-| trackColor                 | rsb_trackColor             | color     | Color of horizontal track                                                              |
-| trackSelectedColor         | rsb_trackSelectedColor     | color     | Color of the selected range of horizontal track                                        |
-| trackThickness             | rsb_trackThickness         | dimension | The thickness of the horizontal track                                                  |
-| trackSelectedThickness     | rsb_trackSelectedThickness | dimension | The thickness of the selected range of horizontal track                                |
-| sidePadding                | rsb_sidePadding            | dimension | Side padding for view, by default 16dp on the left and right                           |
-| touchRadius                | rsb_touchRadius            | dimension | The acceptable touch radius around thumbs in pixels                                    |
-| minThumbDrawable           | rsb_minThumbDrawable       | reference | The drawable to draw min thumb with                                                    |
-| maxThumbDrawable           | rsb_maxThumbDrawable       | reference | The drawable to draw max thumb with                                                    |
-| minRange                   | rsb_minRange               | integer   | The minimum range to be selected. It should at least be 1                              |
-| max                        | rsb_max                    | integer   | The maximum value of thumbs which can also be considered as the maximum possible range |
+| Variable                   | XML Attribute                | Type      | Description                                                                            |
+| :------------------------- | :--------------------------- | :-------- | :--------------------------------------------------------------------------------------|
+| trackColor                 | rsb_trackColor               | color     | Color of horizontal track                                                              |
+| trackSelectedColor         | rsb_trackSelectedColor       | color     | Color of the selected range of horizontal track                                        |
+| trackThickness             | rsb_trackThickness           | dimension | The thickness of the horizontal track                                                  |
+| trackSelectedThickness     | rsb_trackSelectedThickness   | dimension | The thickness of the selected range of horizontal track                                |
+| sidePadding                | rsb_sidePadding              | dimension | Side padding for view, by default 16dp on the left and right                           |
+| touchRadius                | rsb_touchRadius              | dimension | The acceptable touch radius around thumbs in pixels                                    |
+| minThumbDrawable           | rsb_minThumbDrawable         | reference | The drawable to draw min thumb with                                                    |
+| maxThumbDrawable           | rsb_maxThumbDrawable         | reference | The drawable to draw max thumb with                                                    |
+| minRange                   | rsb_minRange                 | integer   | The minimum range to be selected. It should at least be 1                              |
+| max                        | rsb_max                      | integer   | The maximum value of thumbs which can also be considered as the maximum possible range |
+| minThumbOffset             | rsb_minThumbOffsetVertical   | integer   | Vertical pixel offset of min thumb                                                     |
+| minThumbOffset             | rsb_minThumbOffsetHorizontal | integer   | Horizontal pixel offset of min thumb                                                   |
+| maxThumbOffset             | rsb_maxThumbOffsetVertical   | integer   | Vertical pixel offset of max thumb                                                     |
+| maxThumbOffset             | rsb_maxThumbOffsetHorizontal | integer   | Horizontal pixel offset of max thumb                                                   |
+
+### Changelogs
+
+- v1.0.2: Added the option to offset the thumb drawables.
+- v1.0.1: Made the `RangeSeekBar` class, `open`
