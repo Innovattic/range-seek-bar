@@ -61,3 +61,8 @@ You can change view attributes directly from your layout's xml file or in your j
 | minThumbOffset             | rsb_minThumbOffsetHorizontal | integer   | Horizontal pixel offset of min thumb                                                   |
 | maxThumbOffset             | rsb_maxThumbOffsetVertical   | integer   | Vertical pixel offset of max thumb                                                     |
 | maxThumbOffset             | rsb_maxThumbOffsetHorizontal | integer   | Horizontal pixel offset of max thumb                                                   |
+
+### Changelogs
+
+- v1.1.0: Added the option to offset the thumb drawables.
+- v1.0.1: Made the `RangeSeekBar` class, `open`
