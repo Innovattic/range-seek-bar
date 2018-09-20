@@ -1,6 +1,8 @@
 # RangeSeekBar
 
-The missing view for android.
+The missing view for android. 
+
+[![](https://jitpack.io/v/Innovattic/range-seek-bar.svg)](https://jitpack.io/#Innovattic/range-seek-bar) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-RangeSeekBar-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7063)
 
 - [Screenshot](#screenshot)
 - [Usage](#usage)
