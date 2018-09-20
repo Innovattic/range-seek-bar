@@ -345,9 +345,10 @@ open class RangeSeekBar : View {
 	 * Calculates and sets the drawing bounds for drawable and draws it on canvas.
 	 *
 	 * @param canvas the canvas to draw on
-	 * @param position the horizontal position of the drawable's left
+	 * @param position position of the drawable's left edge in horizontal axis (in pixels)
+	 * @param offset the pixel offset of the drawable
 	 */
-	private fun Drawable.drawAtPosition(canvas: Canvas, position: Int, offset: Point) {
+	private fun Drawable.drawAtPosition(canvas: Canvas, position: Int, offset: Point = Point(0, 0)) {
 		val left = position + offset.x
 		val top = ((height - intrinsicHeight) / 2) + offset.y
 		setBounds(left, top, left + intrinsicWidth, top + intrinsicHeight)
