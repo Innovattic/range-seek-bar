@@ -64,5 +64,5 @@ You can change view attributes directly from your layout's xml file or in your j
 
 ### Changelogs
 
-- v1.1.0: Added the option to offset the thumb drawables.
+- v1.0.2: Added the option to offset the thumb drawables.
 - v1.0.1: Made the `RangeSeekBar` class, `open`
