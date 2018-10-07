@@ -28,7 +28,7 @@ Then add the dependency in your android app module's `build.gradle` file.
 
 ```gradle
 dependencies {
-    implementation 'com.github.Innovattic:range-seek-bar:v1.0.2'
+    implementation 'com.github.Innovattic:range-seek-bar:v1.0.3'
 }
 ```
 
@@ -66,5 +66,6 @@ You can change view attributes directly from your layout's xml file or in your j
 
 ### Changelogs
 
+- v1.0.3: AndroidX support
 - v1.0.2: Added the option to offset the thumb drawables.
 - v1.0.1: Made the `RangeSeekBar` class, `open`
