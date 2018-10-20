@@ -28,7 +28,7 @@ Then add the dependency in your android app module's `build.gradle` file.
 
 ```gradle
 dependencies {
-    implementation 'com.github.Innovattic:range-seek-bar:v1.0.3'
+    implementation 'com.github.Innovattic:range-seek-bar:v1.0.4'
 }
 ```
 
@@ -63,9 +63,12 @@ You can change view attributes directly from your layout's xml file or in your j
 | minThumbOffset             | rsb_minThumbOffsetHorizontal | integer   | Horizontal pixel offset of min thumb                                                   |
 | maxThumbOffset             | rsb_maxThumbOffsetVertical   | integer   | Vertical pixel offset of max thumb                                                     |
 | maxThumbOffset             | rsb_maxThumbOffsetHorizontal | integer   | Horizontal pixel offset of max thumb                                                   |
+| trackRoundedCaps           | rsb_trackRoundedCaps         | boolean   | If the track should have rounded caps.                                                 |
+| trackSelectedRoundedCaps   | rsb_trackSelectedRoundedCaps | boolean   | If the selected range track should have rounded caps.                                  |
 
 ### Changelogs
 
+- v1.0.4: Added option to make tracks have rounded caps
 - v1.0.3: AndroidX support
 - v1.0.2: Added the option to offset the thumb drawables.
 - v1.0.1: Made the `RangeSeekBar` class, `open`
