@@ -82,6 +82,16 @@ open class RangeSeekBar : View {
 	var sidePadding: Int
 	
 	/**
+	 * If the track should have rounded caps.
+	 */
+	var trackRoundedCaps: Boolean = false
+	
+	/**
+	 * If the selected range track should have rounded caps.
+	 */
+	var trackSelectedRoundedCaps: Boolean = false
+	
+	/**
 	 * Pixel offset of the min thumb
 	 */
 	var minThumbOffset: Point
@@ -159,6 +169,8 @@ open class RangeSeekBar : View {
 			maxThumbDrawable = extractMaxThumbDrawable(a, defaultMaxThumb)
 			minThumbOffset = extractMinThumbOffset(a)
 			maxThumbOffset = extractMaxThumbOffset(a)
+			trackRoundedCaps = extractTrackRoundedCaps(a)
+			trackSelectedRoundedCaps = extractTrackSelectedRoundedCaps(a)
 		} finally {
 			a.recycle()
 		}
@@ -178,11 +190,11 @@ open class RangeSeekBar : View {
 		val maximumX = paddingLeft + (maxThumbValue / max.toFloat()) * width
 		
 		// Draw full track
-		updatePaint(trackThickness, trackColor)
+		updatePaint(trackThickness, trackColor, trackRoundedCaps)
 		canvas.drawLine(paddingLeft + 0f, verticalCenter, paddingLeft + width.toFloat(), verticalCenter, trackPaint)
 		
 		// Draw selected range of the track
-		updatePaint(trackSelectedThickness, trackSelectedColor)
+		updatePaint(trackSelectedThickness, trackSelectedColor, trackSelectedRoundedCaps)
 		canvas.drawLine(minimumX, verticalCenter, maximumX, verticalCenter, trackPaint)
 		
 		// Draw thumb at minimumX position
@@ -320,9 +332,10 @@ open class RangeSeekBar : View {
 	/**
 	 * Updates the stroke width and color of the paint which is used for drawing tracks.
 	 */
-	private fun updatePaint(strokeWidth: Int, color: Int) {
+	private fun updatePaint(strokeWidth: Int, color: Int, roundedCaps: Boolean) {
 		trackPaint.strokeWidth = strokeWidth.toFloat()
 		trackPaint.color = color
+		trackPaint.strokeCap = if (roundedCaps) Paint.Cap.ROUND else Paint.Cap.SQUARE
 	}
 	
 	/**
@@ -395,6 +408,14 @@ open class RangeSeekBar : View {
 	
 	private fun extractSidePadding(a: TypedArray, defaultValue: Int): Int {
 		return a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_sidePadding, defaultValue)
+	}
+	
+	private fun extractTrackRoundedCaps(a: TypedArray): Boolean {
+		return a.getBoolean(R.styleable.RangeSeekBar_rsb_trackRoundedCaps, false)
+	}
+	
+	private fun extractTrackSelectedRoundedCaps(a: TypedArray): Boolean {
+		return a.getBoolean(R.styleable.RangeSeekBar_rsb_trackSelectedRoundedCaps, false)
 	}
 	
 	private fun extractMinRange(a: TypedArray): Int {
