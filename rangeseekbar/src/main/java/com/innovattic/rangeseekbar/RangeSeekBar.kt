@@ -427,14 +427,14 @@ open class RangeSeekBar : View {
 	}
 	
 	private fun extractMinThumbOffset(a: TypedArray): Point {
-		val x = a.getInteger(R.styleable.RangeSeekBar_rsb_minThumbOffsetHorizontal, 0)
-		val y = a.getInteger(R.styleable.RangeSeekBar_rsb_minThumbOffsetVertical, 0)
+		val x = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_minThumbOffsetHorizontal, 0)
+		val y = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_minThumbOffsetVertical, 0)
 		return Point(x, y)
 	}
 	
 	private fun extractMaxThumbOffset(a: TypedArray): Point {
-		val x = a.getInteger(R.styleable.RangeSeekBar_rsb_maxThumbOffsetHorizontal, 0)
-		val y = a.getInteger(R.styleable.RangeSeekBar_rsb_maxThumbOffsetVertical, 0)
+		val x = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_maxThumbOffsetHorizontal, 0)
+		val y = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_maxThumbOffsetVertical, 0)
 		return Point(x, y)
 	}
 	// endregion
