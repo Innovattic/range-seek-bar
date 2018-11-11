@@ -57,14 +57,14 @@ You can change view attributes directly from your layout's xml file or in your j
 | trackSelectedThickness     | rsb_trackSelectedThickness   | dimension | The thickness of the selected range of horizontal track                                |
 | sidePadding                | rsb_sidePadding              | dimension | Side padding for view, by default 16dp on the left and right                           |
 | touchRadius                | rsb_touchRadius              | dimension | The acceptable touch radius around thumbs in pixels                                    |
-| minThumbDrawable           | rsb_minThumbDrawable         | reference | The drawable to draw min thumb with                                                    |
-| maxThumbDrawable           | rsb_maxThumbDrawable         | reference | The drawable to draw max thumb with                                                    |
-| minRange                   | rsb_minRange                 | integer   | The minimum range to be selected. It should at least be 1                              |
-| max                        | rsb_max                      | integer   | The maximum value of thumbs which can also be considered as the maximum possible range |
 | minThumbOffset             | rsb_minThumbOffsetVertical   | dimension | Vertical offset of min thumb                                                           |
 | minThumbOffset             | rsb_minThumbOffsetHorizontal | dimension | Horizontal offset of min thumb                                                         |
 | maxThumbOffset             | rsb_maxThumbOffsetVertical   | dimension | Vertical offset of max thumb                                                           |
 | maxThumbOffset             | rsb_maxThumbOffsetHorizontal | dimension | Horizontal offset of max thumb                                                         |
+| minThumbDrawable           | rsb_minThumbDrawable         | reference | The drawable to draw min thumb with                                                    |
+| maxThumbDrawable           | rsb_maxThumbDrawable         | reference | The drawable to draw max thumb with                                                    |
+| minRange                   | rsb_minRange                 | integer   | The minimum range to be selected. It should at least be 1                              |
+| max                        | rsb_max                      | integer   | The maximum value of thumbs which can also be considered as the maximum possible range |
 | trackRoundedCaps           | rsb_trackRoundedCaps         | boolean   | If the track should have rounded caps.                                                 |
 | trackSelectedRoundedCaps   | rsb_trackSelectedRoundedCaps | boolean   | If the selected range track should have rounded caps.                                  |
 
