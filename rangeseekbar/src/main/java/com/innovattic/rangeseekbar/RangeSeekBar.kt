@@ -373,17 +373,11 @@ open class RangeSeekBar : View {
 	// These functions will extract the view attributes
 	
 	private fun extractMaxThumbDrawable(a: TypedArray, defaultValue: Drawable): Drawable {
-		if (a.hasValue(R.styleable.RangeSeekBar_rsb_maxThumbDrawable)) {
-			return a.getDrawable(R.styleable.RangeSeekBar_rsb_maxThumbDrawable)
-		}
-		return defaultValue
+		return a.getDrawable(R.styleable.RangeSeekBar_rsb_maxThumbDrawable) ?: defaultValue
 	}
 	
 	private fun extractMinThumbDrawable(a: TypedArray, defaultValue: Drawable): Drawable {
-		if (a.hasValue(R.styleable.RangeSeekBar_rsb_minThumbDrawable)) {
-			return a.getDrawable(R.styleable.RangeSeekBar_rsb_minThumbDrawable)
-		}
-		return defaultValue
+		return a.getDrawable(R.styleable.RangeSeekBar_rsb_minThumbDrawable) ?: defaultValue
 	}
 	
 	private fun extractTrackSelectedColor(a: TypedArray, defaultValue: Int): Int {
