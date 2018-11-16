@@ -373,17 +373,11 @@ open class RangeSeekBar : View {
 	// These functions will extract the view attributes
 	
 	private fun extractMaxThumbDrawable(a: TypedArray, defaultValue: Drawable): Drawable {
-		if (a.hasValue(R.styleable.RangeSeekBar_rsb_maxThumbDrawable)) {
-			return a.getDrawable(R.styleable.RangeSeekBar_rsb_maxThumbDrawable)
-		}
-		return defaultValue
+		return a.getDrawable(R.styleable.RangeSeekBar_rsb_maxThumbDrawable) ?: defaultValue
 	}
 	
 	private fun extractMinThumbDrawable(a: TypedArray, defaultValue: Drawable): Drawable {
-		if (a.hasValue(R.styleable.RangeSeekBar_rsb_minThumbDrawable)) {
-			return a.getDrawable(R.styleable.RangeSeekBar_rsb_minThumbDrawable)
-		}
-		return defaultValue
+		return a.getDrawable(R.styleable.RangeSeekBar_rsb_minThumbDrawable) ?: defaultValue
 	}
 	
 	private fun extractTrackSelectedColor(a: TypedArray, defaultValue: Int): Int {
@@ -427,14 +421,14 @@ open class RangeSeekBar : View {
 	}
 	
 	private fun extractMinThumbOffset(a: TypedArray): Point {
-		val x = a.getInteger(R.styleable.RangeSeekBar_rsb_minThumbOffsetHorizontal, 0)
-		val y = a.getInteger(R.styleable.RangeSeekBar_rsb_minThumbOffsetVertical, 0)
+		val x = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_minThumbOffsetHorizontal, 0)
+		val y = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_minThumbOffsetVertical, 0)
 		return Point(x, y)
 	}
 	
 	private fun extractMaxThumbOffset(a: TypedArray): Point {
-		val x = a.getInteger(R.styleable.RangeSeekBar_rsb_maxThumbOffsetHorizontal, 0)
-		val y = a.getInteger(R.styleable.RangeSeekBar_rsb_maxThumbOffsetVertical, 0)
+		val x = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_maxThumbOffsetHorizontal, 0)
+		val y = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_maxThumbOffsetVertical, 0)
 		return Point(x, y)
 	}
 	// endregion
