@@ -30,7 +30,7 @@ If you are upgrading from a previous version, please take a look at [changelogs]
 
 ```gradle
 dependencies {
-    implementation 'com.github.Innovattic:range-seek-bar:v1.0.5'
+    implementation 'com.github.Innovattic:range-seek-bar:v1.0.6'
 }
 ```
 
@@ -49,7 +49,7 @@ Then use the view in your layouts:
 
 You can change view attributes directly from your layout's xml file or in your java/kotlin code:
 
-| Variable                   | XML Attribute                | Type      | Description                                                                            |
+| Variable / Function        | XML Attribute                | Type      | Description                                                                            |
 | :------------------------- | :--------------------------- | :-------- | :--------------------------------------------------------------------------------------|
 | trackColor                 | rsb_trackColor               | color     | Color of horizontal track                                                              |
 | trackSelectedColor         | rsb_trackSelectedColor       | color     | Color of the selected range of horizontal track                                        |
@@ -67,9 +67,14 @@ You can change view attributes directly from your layout's xml file or in your j
 | max                        | rsb_max                      | integer   | The maximum value of thumbs which can also be considered as the maximum possible range |
 | trackRoundedCaps           | rsb_trackRoundedCaps         | boolean   | If the track should have rounded caps.                                                 |
 | trackSelectedRoundedCaps   | rsb_trackSelectedRoundedCaps | boolean   | If the selected range track should have rounded caps.                                  |
+| setMinThumbValue(integer)  | rsb_initialMinThumbValue     | integer   | Value of min thumb                                                                     |
+| setMaxThumbValue(integer)  | rsb_initialMaxThumbValue     | integer   | Value of max thumb                                                                     |
 
 ### Changelogs
 
+- v1.0.6: 
+  - Fixed `ScrollView` stealing focus issue. (#4)
+  - Added xml attributes to set initial values of min and max thumbs. (#9)
 - v1.0.5: Converted thumb position offset attributes to dimensions instead of integer
 - v1.0.4: Added option to make tracks have rounded caps
 - v1.0.3: AndroidX support
