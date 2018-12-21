@@ -211,7 +211,7 @@ open class RangeSeekBar : View {
 		val width = width - paddingLeft - paddingRight
 		val mx = when {
 			event.x < paddingLeft -> 0
-			event.x in paddingLeft .. this.width - paddingRight -> ((event.x - paddingLeft) / width * max).toInt()
+			paddingLeft <= event.x && event.x <=(this.width - paddingRight) -> ((event.x - paddingLeft) / width * max).toInt()
 			else -> max
 		}
 		val leftThumbX = (paddingLeft + (minThumbValue / max.toFloat() * width)).toInt()
@@ -222,12 +222,16 @@ open class RangeSeekBar : View {
 					selectedThumb = THUMB_MIN
 					offset = mx - minThumbValue
 					changed = true
+					parent.requestDisallowInterceptTouchEvent(true)
 					seekBarChangeListener?.onStartedSeeking()
+					isPressed = true
 				} else if (isInsideRadius(event, rightThumbX, height / 2, touchRadius)) {
 					selectedThumb = THUMB_MAX
 					offset = maxThumbValue - mx
 					changed = true
+					parent.requestDisallowInterceptTouchEvent(true)
 					seekBarChangeListener?.onStartedSeeking()
+					isPressed = true
 				}
 			}
 			MotionEvent.ACTION_MOVE -> {
@@ -242,6 +246,7 @@ open class RangeSeekBar : View {
 			MotionEvent.ACTION_UP -> {
 				selectedThumb = THUMB_NONE
 				seekBarChangeListener?.onStoppedSeeking()
+				isPressed = false
 			}
 		}
 		if (selectedThumb == THUMB_MAX) {
