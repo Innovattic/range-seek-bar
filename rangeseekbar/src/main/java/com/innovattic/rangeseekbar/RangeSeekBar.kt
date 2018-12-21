@@ -171,6 +171,16 @@ open class RangeSeekBar : View {
 			maxThumbOffset = extractMaxThumbOffset(a)
 			trackRoundedCaps = extractTrackRoundedCaps(a)
 			trackSelectedRoundedCaps = extractTrackSelectedRoundedCaps(a)
+			val initialMinThumbValue = extractInitialMinThumbValue(a)
+			val initialMaxThumbValue = extractInitialMaxThumbValue(a)
+			if (initialMinThumbValue != -1) {
+				minThumbValue = max(0, initialMinThumbValue)
+				keepMinWindow(THUMB_MIN)
+			}
+			if (initialMaxThumbValue != -1) {
+				maxThumbValue = min(max, initialMaxThumbValue)
+				keepMinWindow(THUMB_MAX)
+			}
 		} finally {
 			a.recycle()
 		}
@@ -211,7 +221,7 @@ open class RangeSeekBar : View {
 		val width = width - paddingLeft - paddingRight
 		val mx = when {
 			event.x < paddingLeft -> 0
-			paddingLeft <= event.x && event.x <=(this.width - paddingRight) -> ((event.x - paddingLeft) / width * max).toInt()
+			paddingLeft <= event.x && event.x <= (this.width - paddingRight) -> ((event.x - paddingLeft) / width * max).toInt()
 			else -> max
 		}
 		val leftThumbX = (paddingLeft + (minThumbValue / max.toFloat() * width)).toInt()
@@ -279,7 +289,7 @@ open class RangeSeekBar : View {
 	 * Updates the value of minimum thumb and redraws the view.
 	 */
 	fun setMinThumbValue(value: Int) {
-		minThumbValue = value
+		minThumbValue = max(value, 0)
 		keepMinWindow(THUMB_MIN)
 		invalidate()
 	}
@@ -293,7 +303,7 @@ open class RangeSeekBar : View {
 	 * Updates the value of maximum thumb and redraws the view.
 	 */
 	fun setMaxThumbValue(value: Int) {
-		maxThumbValue = value
+		maxThumbValue = min(value, max)
 		keepMinWindow(THUMB_MAX)
 		invalidate()
 	}
@@ -423,6 +433,14 @@ open class RangeSeekBar : View {
 	
 	private fun extractMaxValue(a: TypedArray): Int {
 		return a.getInteger(R.styleable.RangeSeekBar_rsb_max, 100)
+	}
+	
+	private fun extractInitialMinThumbValue(a: TypedArray): Int {
+		return a.getInteger(R.styleable.RangeSeekBar_rsb_initialMinThumbValue, -1)
+	}
+	
+	private fun extractInitialMaxThumbValue(a: TypedArray): Int {
+		return a.getInteger(R.styleable.RangeSeekBar_rsb_initialMaxThumbValue, -1)
 	}
 	
 	private fun extractMinThumbOffset(a: TypedArray): Point {

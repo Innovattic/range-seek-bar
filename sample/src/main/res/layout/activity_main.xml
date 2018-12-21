@@ -18,8 +18,11 @@
     <com.innovattic.rangeseekbar.RangeSeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:rsb_initialMaxThumbValue="40"
+        app:rsb_initialMinThumbValue="20"
         app:rsb_maxThumbDrawable="@drawable/thumb_circle"
         app:rsb_maxThumbOffsetHorizontal="2dp"
+        app:rsb_minRange="10"
         app:rsb_minThumbDrawable="@drawable/thumb_circle"
         app:rsb_minThumbOffsetHorizontal="-2dp"
         app:rsb_trackColor="#888"
@@ -42,6 +45,7 @@
     <com.innovattic.rangeseekbar.RangeSeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:rsb_initialMaxThumbValue="15"
         app:rsb_max="20"
         app:rsb_maxThumbDrawable="@drawable/thumb_circle"
         app:rsb_maxThumbOffsetHorizontal="8dp"
