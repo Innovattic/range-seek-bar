@@ -259,15 +259,6 @@ open class RangeSeekBar : View {
 				isPressed = false
 			}
 		}
-		if (selectedThumb == THUMB_MAX) {
-			if (maxThumbValue <= minThumbValue + minRange) {
-				minThumbValue = maxThumbValue - minRange
-			}
-		} else if (selectedThumb == THUMB_MIN) {
-			if (minThumbValue > maxThumbValue - minRange) {
-				maxThumbValue = minThumbValue + minRange
-			}
-		}
 		keepMinWindow(selectedThumb)
 		
 		if (!changed) {
