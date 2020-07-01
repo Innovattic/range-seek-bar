@@ -18,8 +18,6 @@ import kotlin.math.min
  * RangeSeekBar is a flexible custom view that holds a minimum and maximum range. The user can touch
  * either one of minimum and maximum thumbs and drag them to change their value. It is also possible
  * to change the range with code using [setMinThumbValue] and [setMaxThumbValue] functions.
- *
- * @author Mohammad Mirrajabi
  */
 open class RangeSeekBar : View {
 	// region Properties
