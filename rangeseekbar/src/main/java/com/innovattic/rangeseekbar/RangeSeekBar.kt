@@ -6,7 +6,9 @@ import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Point
+import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -21,84 +23,84 @@ import kotlin.math.min
  */
 open class RangeSeekBar : View {
 	// region Properties
-	
+
 	/**
 	 * The paint to draw the horizontal tracks with.
 	 */
 	private val trackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
 		style = Paint.Style.FILL
 	}
-	
+
 	/**
 	 * Holds the value of selected thumb while dragging it.
 	 */
 	private var selectedThumb: Int = THUMB_NONE
-	
+
 	/**
 	 * Holds the amount of changed value of a thumb while dragging it.
 	 */
 	private var offset: Int = 0
-	
+
 	/**
 	 * The thickness of the horizontal track.
 	 */
 	var trackThickness: Int
-	
+
 	/**
 	 * The thickness of the selected range of horizontal track.
 	 */
 	var trackSelectedThickness: Int
-	
+
 	/**
 	 * Color of horizontal track.
 	 */
 	var trackColor: Int
-	
+
 	/**
 	 * Color of the selected range of horizontal track.
 	 */
 	var trackSelectedColor: Int
-	
+
 	/**
 	 * The acceptable touch radius around thumbs in pixels.
 	 */
 	var touchRadius: Int
-	
+
 	/**
 	 * The drawable to draw min thumb with.
 	 */
 	var minThumbDrawable: Drawable
-	
+
 	/**
 	 * The drawable to draw max thumb with.
 	 */
 	var maxThumbDrawable: Drawable
-	
+
 	/**
 	 * Side padding for view, by default 16dp on the left and right.
 	 */
 	var sidePadding: Int
-	
+
 	/**
 	 * If the track should have rounded caps.
 	 */
 	var trackRoundedCaps: Boolean = false
-	
+
 	/**
 	 * If the selected range track should have rounded caps.
 	 */
 	var trackSelectedRoundedCaps: Boolean = false
-	
+
 	/**
 	 * Pixel offset of the min thumb
 	 */
 	var minThumbOffset: Point
-	
+
 	/**
 	 * Pixel offset of the max thumb
 	 */
 	var maxThumbOffset: Point
-	
+
 	/**
 	 * The minimum range to be selected. It should at least be 1.
 	 */
@@ -106,7 +108,7 @@ open class RangeSeekBar : View {
 		set(value) {
 			field = max(value, 1)
 		}
-	
+
 	/**
 	 * The maximum value of thumbs which can also be considered as the maximum possible range.
 	 */
@@ -120,18 +122,18 @@ open class RangeSeekBar : View {
 	 * Holds the value of min thumb.
 	 */
 	private var minThumbValue: Int = 0
-	
+
 	/**
 	 * Holds the value of max thumb.
 	 */
 	private var maxThumbValue: Int = 0
-	
+
 	/**
 	 * Holds the last value of [minThumbValue] in order to send the callback updates
 	 * only if it is necessary.
 	 */
 	private var lastMinThumbValue = minThumbValue
-	
+
 	/**
 	 * Holds the last value of [maxThumbValue] in order to send the callback updates
 	 * only if it is necessary.
@@ -142,7 +144,7 @@ open class RangeSeekBar : View {
 	 */
 	var seekBarChangeListener: SeekBarChangeListener? = null
 	// endregion
-	
+
 	@JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr) {
 		val res = context.resources
 		val defaultTrackThickness = res.getDimensionPixelSize(R.dimen.rsb_trackDefaultThickness)
@@ -152,7 +154,7 @@ open class RangeSeekBar : View {
 		val defaultSelectedTrackColor = ContextCompat.getColor(context, R.color.rsb_trackSelectedDefaultColor)
 		val defaultMinThumb = ContextCompat.getDrawable(context, R.drawable.rsb_bracket_min)!!
 		val defaultMaxThumb = ContextCompat.getDrawable(context, R.drawable.rsb_bracket_max)!!
-		
+
 		val a = context.theme.obtainStyledAttributes(attrs, R.styleable.RangeSeekBar, 0, 0)
 		try {
 			max = extractMaxValue(a)
@@ -183,11 +185,11 @@ open class RangeSeekBar : View {
 			a.recycle()
 		}
 	}
-	
+
 	override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 		setMeasuredDimension(getDefaultSize(suggestedMinimumWidth, widthMeasureSpec), measureHeight(heightMeasureSpec))
 	}
-	
+
 	override fun onDraw(canvas: Canvas) {
 		super.onDraw(canvas)
 		val paddingLeft = this.paddingLeft + sidePadding
@@ -196,34 +198,36 @@ open class RangeSeekBar : View {
 		val verticalCenter = height / 2f
 		val minimumX = paddingLeft + (minThumbValue / max.toFloat()) * width
 		val maximumX = paddingLeft + (maxThumbValue / max.toFloat()) * width
-		
+
 		// Draw full track
-		updatePaint(trackColor, trackRoundedCaps)
-		canvas.drawRect(
+		trackPaint.color = trackColor
+		canvas.drawTrack(
 			paddingLeft + 0f,
-			verticalCenter - trackThickness / 2,
 			paddingLeft + width.toFloat(),
-			verticalCenter + trackThickness / 2,
-			trackPaint
+			verticalCenter,
+			trackThickness.toFloat(),
+			trackPaint,
+			trackRoundedCaps
 		)
-		
+
 		// Draw selected range of the track
-		updatePaint(trackSelectedColor, trackSelectedRoundedCaps)
-		canvas.drawRect(
+		trackPaint.color = trackSelectedColor
+		canvas.drawTrack(
 			minimumX,
-			verticalCenter - trackSelectedThickness / 2,
 			maximumX,
-			verticalCenter + trackSelectedThickness / 2,
-			trackPaint
+			verticalCenter,
+			trackSelectedThickness.toFloat(),
+			trackPaint,
+			trackSelectedRoundedCaps
 		)
-		
+
 		// Draw thumb at minimumX position
 		minThumbDrawable.drawAtPosition(canvas, minimumX.toInt(), minThumbOffset)
-		
+
 		// Draw thumb at maximumX position
 		maxThumbDrawable.drawAtPosition(canvas, maximumX.toInt() - maxThumbDrawable.intrinsicWidth, maxThumbOffset)
 	}
-	
+
 	override fun onTouchEvent(event: MotionEvent): Boolean {
 		var changed = false
 		val paddingLeft = this.paddingLeft + sidePadding
@@ -270,11 +274,11 @@ open class RangeSeekBar : View {
 			}
 		}
 		keepMinWindow(selectedThumb)
-		
+
 		if (!changed) {
 			return false
 		}
-		
+
 		invalidate()
 		if (lastMinThumbValue != minThumbValue || lastMaxThumbValue != maxThumbValue) {
 			lastMinThumbValue = minThumbValue
@@ -283,9 +287,9 @@ open class RangeSeekBar : View {
 		}
 		return true
 	}
-	
+
 	// region Public functions
-	
+
 	/**
 	 * Updates the value of minimum thumb and redraws the view.
 	 */
@@ -294,12 +298,12 @@ open class RangeSeekBar : View {
 		keepMinWindow(THUMB_MIN)
 		invalidate()
 	}
-	
+
 	/**
 	 * @return the current minimum value of selected range.
 	 */
 	fun getMinThumbValue() = minThumbValue
-	
+
 	/**
 	 * Updates the value of maximum thumb and redraws the view.
 	 */
@@ -308,15 +312,15 @@ open class RangeSeekBar : View {
 		keepMinWindow(THUMB_MAX)
 		invalidate()
 	}
-	
+
 	/**
 	 * @return the current maximum value of selected range.
 	 */
 	fun getMaxThumbValue() = maxThumbValue
 	// endregion
-	
+
 	// region Private functions
-	
+
 	/**
 	 * This function will make sure that while changing the value of a thumb, the other thumb's
 	 * value will also be changed if necessary to keep the min window for range.
@@ -334,7 +338,7 @@ open class RangeSeekBar : View {
 			}
 		}
 	}
-	
+
 	/**
 	 * Checks if the given motion event is inside the circle with a radius of [radius] and
 	 * a center point of {[cx],[cy]}.
@@ -344,15 +348,7 @@ open class RangeSeekBar : View {
 		val dy = event.y - cy
 		return (dx * dx) + (dy * dy) < (radius * radius)
 	}
-	
-	/**
-	 * Updates the stroke width and color of the paint which is used for drawing tracks.
-	 */
-	private fun updatePaint(color: Int, roundedCaps: Boolean) {
-		trackPaint.color = color
-		trackPaint.strokeCap = if (roundedCaps) Paint.Cap.ROUND else Paint.Cap.SQUARE
-	}
-	
+
 	/**
 	 * Calculates the height of the view based on the view parameters.
 	 * If the height is set to []
@@ -367,7 +363,7 @@ open class RangeSeekBar : View {
 			else -> maxHeight + sidePadding
 		}
 	}
-	
+
 	// region Extension functions
 	/**
 	 * Calculates and sets the drawing bounds for drawable and draws it on canvas.
@@ -382,73 +378,91 @@ open class RangeSeekBar : View {
 		setBounds(left, top, left + intrinsicWidth, top + intrinsicHeight)
 		draw(canvas)
 	}
+
+	private fun Canvas.drawTrack(left: Float, right: Float, cy: Float, thickness: Float, paint: Paint, round: Boolean) {
+		val ht = thickness / 2
+		val top = cy - ht
+		val bottom = cy + ht
+
+		if (round) {
+			val left = left - ht
+			val right = right + ht
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				drawRoundRect(left, top, right, bottom, thickness, thickness, paint)
+			} else {
+				drawRoundRect(RectF(left, top, right, bottom), thickness, thickness, paint)
+			}
+		} else {
+			drawRect(left, top, right, bottom, paint)
+		}
+	}
 	// endregion
-	
+
 	// region Attribute extractor functions
 	// These functions will extract the view attributes
-	
+
 	private fun extractMaxThumbDrawable(a: TypedArray, defaultValue: Drawable): Drawable {
 		return a.getDrawable(R.styleable.RangeSeekBar_rsb_maxThumbDrawable) ?: defaultValue
 	}
-	
+
 	private fun extractMinThumbDrawable(a: TypedArray, defaultValue: Drawable): Drawable {
 		return a.getDrawable(R.styleable.RangeSeekBar_rsb_minThumbDrawable) ?: defaultValue
 	}
-	
+
 	private fun extractTrackSelectedColor(a: TypedArray, defaultValue: Int): Int {
 		return a.getColor(R.styleable.RangeSeekBar_rsb_trackSelectedColor, defaultValue)
 	}
-	
+
 	private fun extractTrackColor(a: TypedArray, defaultValue: Int): Int {
 		return a.getColor(R.styleable.RangeSeekBar_rsb_trackColor, defaultValue)
 	}
-	
+
 	private fun extractTrackSelectedThickness(a: TypedArray, defaultValue: Int): Int {
 		return a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_trackSelectedThickness, defaultValue)
 	}
-	
+
 	private fun extractTrackThickness(a: TypedArray, defaultValue: Int): Int {
 		return a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_trackThickness, defaultValue)
 	}
-	
+
 	private fun extractTouchRadius(a: TypedArray, defaultValue: Int): Int {
 		return a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_touchRadius, defaultValue)
 	}
-	
+
 	private fun extractSidePadding(a: TypedArray, defaultValue: Int): Int {
 		return a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_sidePadding, defaultValue)
 	}
-	
+
 	private fun extractTrackRoundedCaps(a: TypedArray): Boolean {
 		return a.getBoolean(R.styleable.RangeSeekBar_rsb_trackRoundedCaps, false)
 	}
-	
+
 	private fun extractTrackSelectedRoundedCaps(a: TypedArray): Boolean {
 		return a.getBoolean(R.styleable.RangeSeekBar_rsb_trackSelectedRoundedCaps, false)
 	}
-	
+
 	private fun extractMinRange(a: TypedArray): Int {
 		return a.getInteger(R.styleable.RangeSeekBar_rsb_minRange, 1)
 	}
-	
+
 	private fun extractMaxValue(a: TypedArray): Int {
 		return a.getInteger(R.styleable.RangeSeekBar_rsb_max, 100)
 	}
-	
+
 	private fun extractInitialMinThumbValue(a: TypedArray): Int {
 		return a.getInteger(R.styleable.RangeSeekBar_rsb_initialMinThumbValue, -1)
 	}
-	
+
 	private fun extractInitialMaxThumbValue(a: TypedArray): Int {
 		return a.getInteger(R.styleable.RangeSeekBar_rsb_initialMaxThumbValue, -1)
 	}
-	
+
 	private fun extractMinThumbOffset(a: TypedArray): Point {
 		val x = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_minThumbOffsetHorizontal, 0)
 		val y = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_minThumbOffsetVertical, 0)
 		return Point(x, y)
 	}
-	
+
 	private fun extractMaxThumbOffset(a: TypedArray): Point {
 		val x = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_maxThumbOffsetHorizontal, 0)
 		val y = a.getDimensionPixelSize(R.styleable.RangeSeekBar_rsb_maxThumbOffsetVertical, 0)
@@ -456,13 +470,13 @@ open class RangeSeekBar : View {
 	}
 	// endregion
 	// endregion
-	
+
 	companion object {
 		private const val THUMB_NONE = 0
 		private const val THUMB_MIN = 1
 		private const val THUMB_MAX = 2
 	}
-	
+
 	/**
 	 * This interface is used to set callbacks for actions in [RangeSeekBar]
 	 */
@@ -471,12 +485,12 @@ open class RangeSeekBar : View {
 		 * Gets called when the user has started dragging min or max thumbs
 		 */
 		fun onStartedSeeking()
-		
+
 		/**
 		 * Gets called when the user has stopped dragging min or max thumb
 		 */
 		fun onStoppedSeeking()
-		
+
 		/**
 		 * Gets called during the dragging of min or max value
 		 *
