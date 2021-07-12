@@ -26,7 +26,7 @@ open class RangeSeekBar : View {
 	 * The paint to draw the horizontal tracks with.
 	 */
 	private val trackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-		style = Paint.Style.STROKE
+		style = Paint.Style.FILL
 	}
 	
 	/**
@@ -198,12 +198,24 @@ open class RangeSeekBar : View {
 		val maximumX = paddingLeft + (maxThumbValue / max.toFloat()) * width
 		
 		// Draw full track
-		updatePaint(trackThickness, trackColor, trackRoundedCaps)
-		canvas.drawLine(paddingLeft + 0f, verticalCenter, paddingLeft + width.toFloat(), verticalCenter, trackPaint)
+		updatePaint(trackColor, trackRoundedCaps)
+		canvas.drawRect(
+			paddingLeft + 0f,
+			verticalCenter - trackThickness / 2,
+			paddingLeft + width.toFloat(),
+			verticalCenter + trackThickness / 2,
+			trackPaint
+		)
 		
 		// Draw selected range of the track
-		updatePaint(trackSelectedThickness, trackSelectedColor, trackSelectedRoundedCaps)
-		canvas.drawLine(minimumX, verticalCenter, maximumX, verticalCenter, trackPaint)
+		updatePaint(trackSelectedColor, trackSelectedRoundedCaps)
+		canvas.drawRect(
+			minimumX,
+			verticalCenter - trackSelectedThickness / 2,
+			maximumX,
+			verticalCenter + trackSelectedThickness / 2,
+			trackPaint
+		)
 		
 		// Draw thumb at minimumX position
 		minThumbDrawable.drawAtPosition(canvas, minimumX.toInt(), minThumbOffset)
@@ -336,8 +348,7 @@ open class RangeSeekBar : View {
 	/**
 	 * Updates the stroke width and color of the paint which is used for drawing tracks.
 	 */
-	private fun updatePaint(strokeWidth: Int, color: Int, roundedCaps: Boolean) {
-		trackPaint.strokeWidth = strokeWidth.toFloat()
+	private fun updatePaint(color: Int, roundedCaps: Boolean) {
 		trackPaint.color = color
 		trackPaint.strokeCap = if (roundedCaps) Paint.Cap.ROUND else Paint.Cap.SQUARE
 	}
