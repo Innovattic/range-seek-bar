@@ -1,8 +1,8 @@
 package com.innovattic.rangeseekbar.sample
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.innovattic.rangeseekbar.RangeSeekBar
 import kotlinx.android.synthetic.main.activity_main.*
 
