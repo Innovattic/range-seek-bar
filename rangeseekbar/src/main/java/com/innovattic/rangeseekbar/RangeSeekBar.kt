@@ -17,10 +17,12 @@ import kotlin.math.min
  * RangeSeekBar is a flexible custom view that holds a minimum and maximum range. The user can touch
  * either one of minimum and maximum thumbs and drag them to change their value. It is also possible
  * to change the range with code using [setMinThumbValue] and [setMaxThumbValue] functions.
- *
- * @author Mohammad Mirrajabi
  */
-class RangeSeekBar : View {
+class RangeSeekBar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
     // region Properties
 
     /**
@@ -83,7 +85,7 @@ class RangeSeekBar : View {
     /**
      * The minimum range to be selected. It should at least be 1.
      */
-    var minRange: Int
+    var minRange: Int = 1
         set(value) {
             field = max(value, 1)
         }
@@ -91,12 +93,13 @@ class RangeSeekBar : View {
     /**
      * The maximum value of thumbs which can also be considered as the maximum possible range.
      */
-    var max: Int
+    var max: Int = 100
         set(value) {
             field = value
             minThumbValue = 0
             maxThumbValue = field
         }
+
     /**
      * Holds the value of min thumb.
      */
@@ -118,27 +121,22 @@ class RangeSeekBar : View {
      * only if it is necessary.
      */
     private var lastMaxThumbValue = maxThumbValue
+
     /**
      * A callback receiver for view changes.
      */
     var seekBarChangeListener: SeekBarChangeListener? = null
     // endregion
 
-    @JvmOverloads constructor(
-            context: Context,
-            attrs: AttributeSet? = null,
-            defStyleAttr: Int = 0
-    ) : super(context, attrs, defStyleAttr) {
+    init {
         val res = context.resources
         val defaultTrackThickness = res.getDimensionPixelSize(R.dimen.rsb_trackDefaultThickness)
         val defaultSidePadding = res.getDimensionPixelSize(R.dimen.rsb_defaultSidePadding)
         val defaultTouchRadius = res.getDimensionPixelSize(R.dimen.rsb_touchRadius)
         val defaultTrackColor = ContextCompat.getColor(context, R.color.rsb_trackDefaultColor)
-        val defaultSelectedTrackColor = ContextCompat.getColor(context,
-                R.color.rsb_trackSelectedDefaultColor)
+        val defaultSelectedTrackColor = ContextCompat.getColor(context, R.color.rsb_trackSelectedDefaultColor)
         val defaultMinThumb = ContextCompat.getDrawable(context, R.drawable.rsb_bracket_min)!!
         val defaultMaxThumb = ContextCompat.getDrawable(context, R.drawable.rsb_bracket_max)!!
-
         val a = context.theme.obtainStyledAttributes(attrs, R.styleable.RangeSeekBar, 0, 0)
         try {
             max = extractMaxValue(a)
@@ -157,8 +155,7 @@ class RangeSeekBar : View {
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        setMeasuredDimension(getDefaultSize(suggestedMinimumWidth, widthMeasureSpec),
-                measureHeight(heightMeasureSpec))
+        setMeasuredDimension(getDefaultSize(suggestedMinimumWidth, widthMeasureSpec), measureHeight(heightMeasureSpec))
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -172,8 +169,7 @@ class RangeSeekBar : View {
 
         // Draw full track
         updatePaint(trackThickness, trackColor)
-        canvas.drawLine(paddingLeft + 0f, verticalCenter, paddingLeft + width.toFloat(),
-                verticalCenter, trackPaint)
+        canvas.drawLine(paddingLeft + 0f, verticalCenter, paddingLeft + width.toFloat(), verticalCenter, trackPaint)
 
         // Draw selected range of the track
         updatePaint(trackSelectedThickness, trackSelectedColor)
@@ -193,8 +189,7 @@ class RangeSeekBar : View {
         val width = width - paddingLeft - paddingRight
         val mx = when {
             event.x < paddingLeft -> 0
-            event.x in paddingLeft..this.width - paddingRight ->
-                ((event.x - paddingLeft) / width * max).toInt()
+            event.x > paddingLeft && event.x < this.width - paddingRight -> ((event.x - paddingLeft) / width * max).toInt()
             else -> max
         }
         val leftThumbX = (paddingLeft + (minThumbValue / max.toFloat() * width)).toInt()
@@ -239,7 +234,7 @@ class RangeSeekBar : View {
         keepMinWindow(selectedThumb)
         if (changed) {
             invalidate()
-            if(lastMinThumbValue != minThumbValue || lastMaxThumbValue != maxThumbValue) {
+            if (lastMinThumbValue != minThumbValue || lastMaxThumbValue != maxThumbValue) {
                 lastMinThumbValue = minThumbValue
                 lastMaxThumbValue = maxThumbValue
                 seekBarChangeListener?.onValueChanged(minThumbValue, maxThumbValue)
