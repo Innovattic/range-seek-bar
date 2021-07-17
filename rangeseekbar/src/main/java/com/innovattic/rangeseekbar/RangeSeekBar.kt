@@ -21,7 +21,11 @@ import kotlin.math.min
  * either one of minimum and maximum thumbs and drag them to change their value. It is also possible
  * to change the range with code using [setMinThumbValue] and [setMaxThumbValue] functions.
  */
-open class RangeSeekBar : View {
+open class RangeSeekBar @JvmOverloads constructor(
+	context: Context,
+	attrs: AttributeSet? = null,
+	defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 	// region Properties
 
 	/**
@@ -104,7 +108,7 @@ open class RangeSeekBar : View {
 	/**
 	 * The minimum range to be selected. It should at least be 1.
 	 */
-	var minRange: Int
+	var minRange: Int = 1
 		set(value) {
 			field = max(value, 1)
 		}
@@ -112,12 +116,13 @@ open class RangeSeekBar : View {
 	/**
 	 * The maximum value of thumbs which can also be considered as the maximum possible range.
 	 */
-	var max: Int
+	var max: Int = 100
 		set(value) {
 			field = value
 			minThumbValue = 0
 			maxThumbValue = field
 		}
+
 	/**
 	 * Holds the value of min thumb.
 	 */
@@ -139,13 +144,14 @@ open class RangeSeekBar : View {
 	 * only if it is necessary.
 	 */
 	private var lastMaxThumbValue = maxThumbValue
+
 	/**
 	 * A callback receiver for view changes.
 	 */
 	var seekBarChangeListener: SeekBarChangeListener? = null
 	// endregion
 
-	@JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr) {
+	init {
 		val res = context.resources
 		val defaultTrackThickness = res.getDimensionPixelSize(R.dimen.rsb_trackDefaultThickness)
 		val defaultSidePadding = res.getDimensionPixelSize(R.dimen.rsb_defaultSidePadding)
