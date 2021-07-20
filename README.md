@@ -71,7 +71,10 @@ You can change view attributes directly from your layout's xml file or in your j
 | setMaxThumbValue(integer)  | rsb_initialMaxThumbValue     | integer   | Value of max thumb                                                                     |
 
 ### Changelogs
-
+- v1.0.8:
+  - Fixed #20: Remove gap on the sides of the track
+  - Fixed #23: `setEnabled` not working
+- v1.0.7: Minor improvements and dependency updates
 - v1.0.6: 
   - Fixed `ScrollView` stealing focus issue. (#4)
   - Added xml attributes to set initial values of min and max thumbs. (#9)
