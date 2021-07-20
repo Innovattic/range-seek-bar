@@ -237,6 +237,10 @@ open class RangeSeekBar @JvmOverloads constructor(
 	}
 
 	override fun onTouchEvent(event: MotionEvent): Boolean {
+		if (!isEnabled) {
+			return false
+		}
+
 		var changed = false
 		val paddingLeft = this.paddingLeft + sidePadding
 		val paddingRight = this.paddingRight + sidePadding
