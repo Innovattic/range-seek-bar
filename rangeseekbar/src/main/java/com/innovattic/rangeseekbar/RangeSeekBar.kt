@@ -6,7 +6,9 @@ import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Point
+import android.graphics.RectF
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
@@ -30,8 +32,10 @@ open class RangeSeekBar @JvmOverloads constructor(
 	 * The paint to draw the horizontal tracks with.
 	 */
 	private val trackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-		style = Paint.Style.STROKE
+		style = Paint.Style.FILL
 	}
+
+	private val helperRectF = RectF()
 
 	/**
 	 * Holds the value of selected thumb while dragging it.
@@ -158,6 +162,7 @@ open class RangeSeekBar @JvmOverloads constructor(
 		val defaultSelectedTrackColor = ContextCompat.getColor(context, R.color.rsb_trackSelectedDefaultColor)
 		val defaultMinThumb = ContextCompat.getDrawable(context, R.drawable.rsb_bracket_min)!!
 		val defaultMaxThumb = ContextCompat.getDrawable(context, R.drawable.rsb_bracket_max)!!
+
 		val a = context.theme.obtainStyledAttributes(attrs, R.styleable.RangeSeekBar, 0, 0)
 		try {
 			max = extractMaxValue(a)
@@ -203,12 +208,26 @@ open class RangeSeekBar @JvmOverloads constructor(
 		val maximumX = paddingLeft + (maxThumbValue / max.toFloat()) * width
 
 		// Draw full track
-		updatePaint(trackThickness, trackColor, trackRoundedCaps)
-		canvas.drawLine(paddingLeft + 0f, verticalCenter, paddingLeft + width.toFloat(), verticalCenter, trackPaint)
+		trackPaint.color = trackColor
+		canvas.drawTrack(
+			paddingLeft + 0f,
+			paddingLeft + width.toFloat(),
+			verticalCenter,
+			trackThickness.toFloat(),
+			trackPaint,
+			trackRoundedCaps
+		)
 
 		// Draw selected range of the track
-		updatePaint(trackSelectedThickness, trackSelectedColor, trackSelectedRoundedCaps)
-		canvas.drawLine(minimumX, verticalCenter, maximumX, verticalCenter, trackPaint)
+		trackPaint.color = trackSelectedColor
+		canvas.drawTrack(
+			minimumX,
+			maximumX,
+			verticalCenter,
+			trackSelectedThickness.toFloat(),
+			trackPaint,
+			trackSelectedRoundedCaps
+		)
 
 		// Draw thumb at minimumX position
 		minThumbDrawable.drawAtPosition(canvas, minimumX.toInt(), minThumbOffset)
@@ -218,6 +237,10 @@ open class RangeSeekBar @JvmOverloads constructor(
 	}
 
 	override fun onTouchEvent(event: MotionEvent): Boolean {
+		if (!isEnabled) {
+			return false
+		}
+
 		var changed = false
 		val paddingLeft = this.paddingLeft + sidePadding
 		val paddingRight = this.paddingRight + sidePadding
@@ -339,15 +362,6 @@ open class RangeSeekBar @JvmOverloads constructor(
 	}
 
 	/**
-	 * Updates the stroke width and color of the paint which is used for drawing tracks.
-	 */
-	private fun updatePaint(strokeWidth: Int, color: Int, roundedCaps: Boolean) {
-		trackPaint.strokeWidth = strokeWidth.toFloat()
-		trackPaint.color = color
-		trackPaint.strokeCap = if (roundedCaps) Paint.Cap.ROUND else Paint.Cap.SQUARE
-	}
-
-	/**
 	 * Calculates the height of the view based on the view parameters.
 	 * If the height is set to []
 	 */
@@ -375,6 +389,25 @@ open class RangeSeekBar @JvmOverloads constructor(
 		val top = ((height - intrinsicHeight) / 2) + offset.y
 		setBounds(left, top, left + intrinsicWidth, top + intrinsicHeight)
 		draw(canvas)
+	}
+
+	private fun Canvas.drawTrack(left: Float, right: Float, cy: Float, thickness: Float, paint: Paint, round: Boolean) {
+		val ht = thickness / 2
+		val top = cy - ht
+		val bottom = cy + ht
+
+		if (round) {
+			val left = left - ht
+			val right = right + ht
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				drawRoundRect(left, top, right, bottom, thickness, thickness, paint)
+			} else {
+				helperRectF.set(left, top, right, bottom)
+				drawRoundRect(helperRectF, thickness, thickness, paint)
+			}
+		} else {
+			drawRect(left, top, right, bottom, paint)
+		}
 	}
 	// endregion
 

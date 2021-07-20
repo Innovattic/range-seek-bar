@@ -12,6 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
+        app:rsb_trackThickness="20dp"
+        app:rsb_trackSelectedThickness="2dp"
+        app:rsb_trackSelectedColor="@color/colorPrimary"
         app:rsb_maxThumbOffsetHorizontal="2dp"
         app:rsb_minThumbOffsetHorizontal="-2dp" />
 
