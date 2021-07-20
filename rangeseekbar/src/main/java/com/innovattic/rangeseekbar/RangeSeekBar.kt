@@ -35,6 +35,8 @@ open class RangeSeekBar @JvmOverloads constructor(
 		style = Paint.Style.FILL
 	}
 
+	private val helperRectF = RectF()
+
 	/**
 	 * Holds the value of selected thumb while dragging it.
 	 */
@@ -396,7 +398,8 @@ open class RangeSeekBar @JvmOverloads constructor(
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 				drawRoundRect(left, top, right, bottom, thickness, thickness, paint)
 			} else {
-				drawRoundRect(RectF(left, top, right, bottom), thickness, thickness, paint)
+				helperRectF.set(left, top, right, bottom)
+				drawRoundRect(helperRectF, thickness, thickness, paint)
 			}
 		} else {
 			drawRect(left, top, right, bottom, paint)
