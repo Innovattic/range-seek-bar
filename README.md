@@ -30,7 +30,7 @@ If you are upgrading from a previous version, please take a look at [changelogs]
 
 ```gradle
 dependencies {
-    implementation 'com.github.Innovattic:range-seek-bar:v1.0.6'
+    implementation 'com.github.Innovattic:range-seek-bar:v1.0.8'
 }
 ```
 
