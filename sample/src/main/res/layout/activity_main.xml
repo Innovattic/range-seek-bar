@@ -9,17 +9,57 @@
     android:paddingEnd="10dp"
     tools:context=".MainActivity">
 
-    <com.innovattic.rangeseekbar.RangeSeekBar
-        android:id="@+id/rangeSeekBar"
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@color/colorAccent"
-        app:rsb_maxThumbOffsetHorizontal="2dp"
-        app:rsb_minThumbOffsetHorizontal="-2dp"
-        app:rsb_trackSelectedColor="@color/colorPrimary"
-        app:rsb_trackSelectedThickness="2dp"
-        app:rsb_trackThickness="20dp" />
+        android:text="Example:"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tvRangeStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            tools:text="10" />
+
+        <com.innovattic.rangeseekbar.RangeSeekBar
+            android:id="@+id/rangeSeekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            app:rsb_maxThumbOffsetHorizontal="2dp"
+            app:rsb_minThumbOffsetHorizontal="-2dp"
+            app:rsb_trackSelectedColor="@color/colorPrimary"
+            app:rsb_trackSelectedThickness="2dp"
+            app:rsb_trackThickness="20dp" />
+
+        <TextView
+            android:id="@+id/tvRangeEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            tools:text="100" />
+    </TableRow>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Other Examples:"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
     <com.innovattic.rangeseekbar.RangeSeekBar
         android:layout_width="match_parent"
@@ -69,4 +109,5 @@
         app:rsb_trackSelectedRoundedCaps="true"
         app:rsb_trackSelectedThickness="18dp"
         app:rsb_trackThickness="36dp" />
+
 </LinearLayout>

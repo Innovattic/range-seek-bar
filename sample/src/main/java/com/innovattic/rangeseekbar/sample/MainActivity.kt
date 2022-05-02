@@ -28,10 +28,19 @@ class MainActivity : AppCompatActivity(), RangeSeekBar.SeekBarChangeListener {
 
     override fun onValueChanged(minThumbValue: Int, maxThumbValue: Int) {
         Log.i(TAG, "Selected range is from $minThumbValue to $maxThumbValue")
+        tvRangeStart.text = minThumbValue.toString()
+        tvRangeEnd.text = maxThumbValue.toString()
     }
 
     private fun setupRangeSeekBar() {
-        rangeSeekBar.max = 20
+        val minValue = 0
+        val maxValue = 500
+
+        rangeSeekBar.max = maxValue // Max value for seekbar
+        rangeSeekBar.minRange = 10 // Minimum space Range between maximum and minimum values.
         rangeSeekBar.seekBarChangeListener = this
+
+        tvRangeStart.text = minValue.toString()
+        tvRangeEnd.text = maxValue.toString()
     }
 }
