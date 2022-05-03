@@ -30,9 +30,11 @@ If you are upgrading from a previous version, please take a look at [changelogs]
 
 ```gradle
 dependencies {
-    implementation 'com.github.Innovattic:range-seek-bar:v1.0.6'
+    implementation 'com.github.Innovattic:range-seek-bar:v[Latest version]'
 }
 ```
+
+Latest version: [![](https://jitpack.io/v/Innovattic/range-seek-bar.svg)](https://jitpack.io/#Innovattic/range-seek-bar) (The version name starts with a `v`, so make sure you keep that in)
 
 Then use the view in your layouts:
 
